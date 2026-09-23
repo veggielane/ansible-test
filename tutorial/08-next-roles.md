@@ -31,6 +31,7 @@ Steps 5 and 6 are copy-and-rename from `acme.windchill.oir`; that is deliberate.
 | Folders, cabinets | LoadFromFile (`wt.folder.LoadFolder.*`) | same recipe | same |
 | Life cycle templates | LoadFromFile (`wt.lifecycle.LoadLifeCycle.*`) or Import/Export | same recipe with exported XML as `load_file` | same |
 | Workflow templates | Import/Export (jar) via the UI or `wt.ixb` command line | `win_copy` the jar + `win_shell` the import; track by checksum like the loader | applied copy |
+| Type icons and other images | files under `codebase\netmarkets\images` | **done**: `acme.windchill.icons` (`win_copy`, no loader; `types` depends on it) | win_copy checksums |
 | Soft types, attributes, layouts, enumerations | Type and Attribute Management export -> load file, LoadFromFile | **done**: `acme.windchill.types`; `oir` depends on it so types always load first | applied-copy checksum |
 | Preferences | Preference Management export/import | same | applied copy |
 | `wt.properties`, `site.xconf` | `xconfmanager -s key=value -t codebase/wt.properties -p` | `win_shell xconfmanager` for each key with `changed_when` based on reading the current value first; **handler** restarts Windchill | read-then-set |

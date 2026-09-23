@@ -54,9 +54,11 @@ The `applied\` folder is the role's memory of what Windchill already has.
 It is what makes the role idempotent even though `LoadFromFile` itself is
 not: run the playbook ten times and Windchill is touched once.
 
-One more thing happens before any of this: `acme.windchill.types` runs. A
-rule for a soft type cannot be loaded until the type exists, so the `oir`
-role lists `types` as a dependency in its `meta/main.yml`, and the lab
+Two things happen before any of this: `acme.windchill.icons` copies the
+type icons into `codebase\netmarkets\images`, then `acme.windchill.types`
+runs. A rule for a soft type cannot be loaded until the type exists, and a
+type refers to its icon, so `oir` lists `types` as a dependency in its
+`meta/main.yml` and `types` lists `icons`. The lab
 inventory carries an example type folder (`config/types/lab_part/`, four
 placeholder files, listed in `group_vars/lab/types.yml`). Whichever way you start the play, `--tags oir`
 included, the types go in first.

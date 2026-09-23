@@ -4,3 +4,9 @@
 *.cmd text eol=crlf
 *.bat text eol=crlf
 *.ps1 text eol=crlf
+
+# Images are binary: never normalise their line endings
+*.gif binary
+*.png binary
+*.jpg binary
+*.ico binary

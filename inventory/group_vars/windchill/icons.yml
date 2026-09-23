@@ -1,0 +1,18 @@
+---
+# Type icons and other images for ALL environments (consumed by
+# acme.windchill.icons). Copied to <windchill_home>\codebase\netmarkets\images
+# BEFORE soft types are imported: the types role depends on the icons role,
+# so a type's icon file is always in place before the type refers to it.
+#
+# Each entry mirrors the contents of a folder under config/ into
+# netmarkets\images (optionally into a subfolder, dest). Keep the same
+# sub-folder layout the type definitions use: a type whose icon is
+# netmarkets/images/acme/widget.gif needs config/icons/acme/widget.gif.
+#
+# The lab has its own list in group_vars/lab/icons.yml (a child group wins).
+windchill_icons: []
+
+# Example:
+#
+# windchill_icons:
+#   - src: icons                    # config/icons/**  ->  netmarkets\images\**

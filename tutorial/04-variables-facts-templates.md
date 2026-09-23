@@ -74,6 +74,12 @@ double the backslashes `"C:\\ansible"`. When a variable is involved you need
 double quotes (for the `{{ }}`), so you will see
 `"{{ windchill_home }}\\bin\\windchill.exe"` a lot.
 
+Second half of the gotcha: never put a backslash (or `\n`) inside a Jinja
+string literal in a YAML file, as in `{{ root ~ "\\" ~ name }}`. In current
+Ansible those are taken verbatim there, so you get two backslashes. Build the
+path on the YAML side instead: `"{{ root }}\\{{ name }}"`. The collection's
+`tests/icons_target.yml` exists because of exactly this.
+
 ## 04c - Templates and handlers (`tutorial/playbooks/04_templates_handlers.yml`)
 
 A **template** is a file with holes. `tutorial/playbooks/templates/hello.txt.j2`:

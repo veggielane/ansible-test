@@ -1,0 +1,8 @@
+---
+# LAB icons. Overrides the (empty) shared list in group_vars/windchill/icons.yml.
+# config/icons/lab/labpart.gif ends up as
+# C:\FakeWindchill\Windchill\codebase\netmarkets\images\lab\labpart.gif,
+# and the play shows it copied before the lab type is imported.
+windchill_icons:
+  - src: icons/lab
+    dest: lab

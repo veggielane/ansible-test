@@ -15,14 +15,16 @@ New to Ansible? The `tutorial/` folder is a course built on this project.
 ```
 inventory/                  WHO and WHAT
   hosts.yml                   lab / dev / ppe / live groups under "windchill"
-  group_vars/windchill/       shared settings + the lists of what to load (types.yml, oir.yml)
+  group_vars/windchill/       shared settings + the lists of what to load (icons.yml, types.yml, oir.yml)
   group_vars/<env>/           what differs per environment + that environment's vault
 config/                     the configuration CONTENT, shared by all environments
+  icons/                      type icons, mirrored into codebase\netmarkets\images
   types/<type>/               one folder per soft type: the up-to-four load files of its export
   oir/                        object initialization rule bodies
 playbooks/
-  site.yml                    everything, in dependency order (types, then oir, ...)
-  windchill_types.yml         one area at a time
+  site.yml                    everything, in dependency order (icons, types, oir, ...)
+  windchill_icons.yml         one area at a time
+  windchill_types.yml
   windchill_oir.yml
   lab_setup.yml               installs the fake Windchill on your PC
   lab_render_oir.yml          renders the OIR load files locally, no host needed
@@ -36,12 +38,13 @@ tutorial/                   the lessons and their practice playbooks
 
 | Step | Role | Data here | How Windchill takes it |
 |---|---|---|---|
-| 1 | `acme.windchill.types` | `group_vars/windchill/types.yml`, `config/types/<type>/*.xml` | `LoadFromFile` of the export from Type and Attribute Management, site level |
-| 2 | `acme.windchill.oir` | `group_vars/windchill/oir.yml`, `config/oir/*.xml` | `LoadFromFile` of a rendered `csvTypeBasedRule` document |
+| 1 | `acme.windchill.icons` | `group_vars/windchill/icons.yml`, `config/icons/**` | plain files copied into `codebase\netmarkets\images` |
+| 2 | `acme.windchill.types` | `group_vars/windchill/types.yml`, `config/types/<type>/*.xml` | `LoadFromFile` of the export from Type and Attribute Management, site level |
+| 3 | `acme.windchill.oir` | `group_vars/windchill/oir.yml`, `config/oir/*.xml` | `LoadFromFile` of a rendered `csvTypeBasedRule` document |
 
-The order is enforced by the collection (`oir` depends on `types`), not only
-by `site.yml`, so a rule for a soft type can never run before the type
-exists. Each step only loads a file when it changed since the last
+The order is enforced by the collection (`oir` depends on `types`, `types`
+on `icons`), not only by `site.yml`, so a type can never be imported before
+its icon is there, nor a rule before its type exists. Each step only loads a file when it changed since the last
 successful load (a copy of what was applied is kept on the server).
 
 ## Quick start (no Windchill needed)

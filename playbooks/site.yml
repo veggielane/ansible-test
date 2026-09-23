@@ -10,13 +10,16 @@
   gather_facts: false
 
   roles:
-    # 1. Soft types first: nothing that refers to a type can load before it exists.
-    #    The oir role also declares this as a dependency, so even --tags oir
-    #    imports the types first.
+    # 1. Type icons: files under codebase\netmarkets\images that type definitions refer to.
+    - role: acme.windchill.icons
+      tags: [icons]
+
+    # 2. Soft types: nothing that refers to a type can load before it exists.
+    #    (types depends on icons, oir on types, so even --tags oir keeps this order.)
     - role: acme.windchill.types
       tags: [types]
 
-    # 2. Object initialization rules
+    # 3. Object initialization rules
     - role: acme.windchill.oir
       tags: [oir]
 
