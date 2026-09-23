@@ -5,7 +5,7 @@ the output.
 
 ## Anatomy
 
-`playbooks/01_ping.yml`:
+`tutorial/playbooks/01_ping.yml`:
 
 ```yaml
 ---                                        # YAML file marker (optional, conventional)
@@ -31,7 +31,7 @@ collections.
 ## Run it
 
 ```powershell
-.\bin\ansible.ps1 ansible-playbook playbooks/01_ping.yml
+.\bin\ansible.ps1 ansible-playbook tutorial/playbooks/01_ping.yml
 ```
 
 ```
@@ -66,13 +66,13 @@ for when a host is unreachable.
 
 ```powershell
 # parse only, run nothing
-.\bin\ansible.ps1 ansible-playbook playbooks/01_ping.yml --syntax-check
+.\bin\ansible.ps1 ansible-playbook tutorial/playbooks/01_ping.yml --syntax-check
 
 # which hosts would be targeted?
-.\bin\ansible.ps1 ansible-playbook playbooks/01_ping.yml -e target=windchill --list-hosts
+.\bin\ansible.ps1 ansible-playbook tutorial/playbooks/01_ping.yml -e target=windchill --list-hosts
 
 # a subset of the targeted hosts
-.\bin\ansible.ps1 ansible-playbook playbooks/01_ping.yml -e target=windchill --limit dev
+.\bin\ansible.ps1 ansible-playbook tutorial/playbooks/01_ping.yml -e target=windchill --limit dev
 
 # run one module without writing a playbook ("ad-hoc")
 .\bin\ansible.ps1 ansible lab -m ansible.windows.win_shell -a "Get-Date"

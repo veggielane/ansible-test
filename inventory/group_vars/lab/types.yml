@@ -1,0 +1,8 @@
+---
+# LAB soft type import. Overrides the (empty) shared list in
+# group_vars/windchill/types.yml because lab is a child group of windchill.
+# The file is a placeholder the fake Windchill accepts; a real one comes out
+# of Type and Attribute Management.
+windchill_types_files:
+  - name: lab_example_types
+    load_file: types/example_types.xml

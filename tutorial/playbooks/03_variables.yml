@@ -1,7 +1,7 @@
 ---
 # Lesson 04b: variables, register, when, loop, set_fact.
-# Run:  ansible-playbook playbooks/03_variables.yml
-#       ansible-playbook playbooks/03_variables.yml -e greeting="hello from the command line"
+# Run:  ansible-playbook tutorial/playbooks/03_variables.yml
+#       ansible-playbook tutorial/playbooks/03_variables.yml -e greeting="hello from the command line"
 - name: Lesson 04b - variables, register, when, loop
   hosts: "{{ target | default('lab') }}"   # environment to touch: -e target=dev|ppe|live (default: lab)
   gather_facts: false

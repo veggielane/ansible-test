@@ -2,7 +2,7 @@
 # Lesson 03: the smallest useful playbook.
 #
 # A playbook is a list of PLAYS. A play = "on these hosts, run these tasks".
-# Run:  ansible-playbook playbooks/01_ping.yml
+# Run:  ansible-playbook tutorial/playbooks/01_ping.yml
 - name: Lesson 03 - can Ansible reach the Windchill servers?
   hosts: "{{ target | default('lab') }}"   # environment to touch: -e target=dev|ppe|live (default: lab)
   gather_facts: false       # skip the automatic "collect info about the host" step, for speed

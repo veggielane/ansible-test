@@ -5,7 +5,7 @@
 #
 # Deliberately empty to start with: an OIR changes how every new object of a
 # type is numbered / filed / life-cycled, so nothing is loaded until you say
-# so. docs/07 walks through the safe first exercise on a real server: export
+# so. tutorial/07 walks through the safe first exercise on a real server: export
 # an EXISTING rule from Windchill and load it back unchanged.
 #
 # The lab has its own list in group_vars/lab/oir.yml (a child group wins).

@@ -40,7 +40,7 @@ control node. On a Windows PC that leaves two options:
 
    ```powershell
    .\bin\ansible.ps1 ansible --version
-   .\bin\ansible.ps1 ansible-playbook playbooks/01_ping.yml
+   .\bin\ansible.ps1 ansible-playbook tutorial/playbooks/01_ping.yml
    .\bin\ansible.ps1            # no arguments = a shell inside the container
    ```
 
@@ -50,7 +50,7 @@ control node. On a Windows PC that leaves two options:
    function wa { & "C:\git\ansible\bin\ansible.ps1" @args }
    ```
 
-   then `wa ansible-playbook playbooks/01_ping.yml`.
+   then `wa ansible-playbook tutorial/playbooks/01_ping.yml`.
 
 How it fits together: `docker-compose.yml` mounts this folder at `/work`
 inside the container, so edits you make on Windows are visible immediately.
@@ -104,7 +104,7 @@ config/              Windchill configuration content (rule bodies, ...)
 (roles)              live in the sibling repo ansible-collection-windchill (lesson 09)
 playbooks/           what to run: numbered ones are lessons, the rest is real
 lab/                 the fake Windchill
-docs/                these lessons
+tutorial/                these lessons
 ```
 
 Next: [01 - How Ansible thinks](01-concepts.md)

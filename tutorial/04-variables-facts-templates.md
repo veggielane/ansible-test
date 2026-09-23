@@ -3,7 +3,7 @@
 **Goal:** the building blocks that every role is made from. Three playbooks
 to run, each short.
 
-## 04a - Facts (`playbooks/02_facts.yml`)
+## 04a - Facts (`tutorial/playbooks/02_facts.yml`)
 
 With `gather_facts: true` (the default) Ansible first runs the `setup`
 module, which collects information about the host: OS, hostname, memory, IP
@@ -11,15 +11,15 @@ addresses, environment variables, and so on. Each becomes a variable named
 `ansible_*`, and all of them are under `ansible_facts`.
 
 ```powershell
-.\bin\ansible.ps1 ansible-playbook playbooks/02_facts.yml
-.\bin\ansible.ps1 ansible-playbook playbooks/02_facts.yml -v      # dumps everything
+.\bin\ansible.ps1 ansible-playbook tutorial/playbooks/02_facts.yml
+.\bin\ansible.ps1 ansible-playbook tutorial/playbooks/02_facts.yml -v      # dumps everything
 ```
 
 Facts cost a few seconds per host. Playbooks that do not need them set
 `gather_facts: false`; the Windchill roles do, because they get everything
 they need from inventory variables.
 
-## 04b - Variables (`playbooks/03_variables.yml`)
+## 04b - Variables (`tutorial/playbooks/03_variables.yml`)
 
 Where a value can come from, lowest to highest precedence:
 
@@ -74,9 +74,9 @@ double the backslashes `"C:\\ansible"`. When a variable is involved you need
 double quotes (for the `{{ }}`), so you will see
 `"{{ windchill_home }}\\bin\\windchill.exe"` a lot.
 
-## 04c - Templates and handlers (`playbooks/04_templates_handlers.yml`)
+## 04c - Templates and handlers (`tutorial/playbooks/04_templates_handlers.yml`)
 
-A **template** is a file with holes. `playbooks/templates/hello.txt.j2`:
+A **template** is a file with holes. `tutorial/playbooks/templates/hello.txt.j2`:
 
 ```
 Windchill home ......: {{ windchill_home }}
@@ -109,8 +109,8 @@ handlers:
 Run the playbook twice:
 
 ```powershell
-.\bin\ansible.ps1 ansible-playbook playbooks/04_templates_handlers.yml
-.\bin\ansible.ps1 ansible-playbook playbooks/04_templates_handlers.yml
+.\bin\ansible.ps1 ansible-playbook tutorial/playbooks/04_templates_handlers.yml
+.\bin\ansible.ps1 ansible-playbook tutorial/playbooks/04_templates_handlers.yml
 ```
 
 First run: `changed` and the handler fires. Second run: `ok`, handler silent.
@@ -120,7 +120,7 @@ only the difference is applied, is the working rhythm of Ansible.
 ## Dry runs
 
 ```powershell
-.\bin\ansible.ps1 ansible-playbook playbooks/04_templates_handlers.yml --check --diff
+.\bin\ansible.ps1 ansible-playbook tutorial/playbooks/04_templates_handlers.yml --check --diff
 ```
 
 `--check` asks every module to report what it *would* do without doing it;

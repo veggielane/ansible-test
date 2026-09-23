@@ -36,7 +36,7 @@ WORKDIR /work
 #     --build-arg ARTIFACTORY_GALAXY_URL=https://artifactory.example.com/artifactory/api/ansible/ansible/ \
 #     --secret id=artifactory_token,src=.artifactory_token .
 # In DEV MODE (plain `docker compose build`) docker-compose.yml mounts your local
-# checkout of the collection instead. See docs/09-collection-and-artifactory.md.
+# checkout of the collection instead. See tutorial/09-collection-and-artifactory.md.
 ARG ARTIFACTORY_GALAXY_URL=""
 COPY requirements.yml requirements-windchill.yml /tmp/
 RUN --mount=type=secret,id=artifactory_token,required=false \

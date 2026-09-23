@@ -1,6 +1,6 @@
 ---
 # Lesson 04a: facts = information Ansible gathers about a host before the tasks run.
-# Run:  ansible-playbook playbooks/02_facts.yml        (add -v to see all facts)
+# Run:  ansible-playbook tutorial/playbooks/02_facts.yml        (add -v to see all facts)
 - name: Lesson 04a - facts about the Windchill server
   hosts: "{{ target | default('lab') }}"   # environment to touch: -e target=dev|ppe|live (default: lab)
   gather_facts: true        # runs the "setup" module first; results become ansible_* variables

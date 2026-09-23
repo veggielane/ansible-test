@@ -3,10 +3,11 @@
 # Environment-specific values live in group_vars/<env>/ and win over these
 # (a child group beats its parent). Ansible loads every *.yml in this folder:
 #   vars.yml  - plain settings (this file)
-#   oir.yml   - the object initialization rules (one file per configuration area)
+#   types.yml - the soft type load files to import   (one file per configuration area)
+#   oir.yml   - the object initialization rules
 
 # ---------------------------------------------------------------------------
-# A) HOW to connect: WinRM over HTTPS (Windows-side setup: docs/02)
+# A) HOW to connect: WinRM over HTTPS (Windows-side setup: tutorial/02)
 # ---------------------------------------------------------------------------
 ansible_connection: winrm
 ansible_port: 5986

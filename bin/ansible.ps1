@@ -4,7 +4,7 @@
 
 .EXAMPLE
   .\bin\ansible.ps1 ansible --version
-  .\bin\ansible.ps1 ansible-playbook playbooks/01_ping.yml
+  .\bin\ansible.ps1 ansible-playbook tutorial/playbooks/01_ping.yml
   .\bin\ansible.ps1 ansible-vault encrypt inventory/group_vars/windchill/vault.yml
   .\bin\ansible.ps1 bash            # drop into a shell inside the container
 

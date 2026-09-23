@@ -3,7 +3,7 @@
 #
 #   docker compose build                          # once (and after editing docker/Dockerfile)
 #   docker compose run --rm ansible ansible --version
-#   docker compose run --rm ansible ansible-playbook playbooks/01_ping.yml
+#   docker compose run --rm ansible ansible-playbook tutorial/playbooks/01_ping.yml
 #   docker compose run --rm ansible bash          # interactive shell inside the node
 #
 # The project folder is mounted at /work, so edits on Windows are visible instantly.
@@ -14,7 +14,7 @@ services:
       dockerfile: docker/Dockerfile
       args:
         # Empty = dev mode. Release mode is built with `docker build` directly
-        # (it needs a token as a build secret): see docs/09.
+        # (it needs a token as a build secret): see tutorial/09.
         ARTIFACTORY_GALAXY_URL: ""
     image: windchill-ansible-control:latest
     working_dir: /work

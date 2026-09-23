@@ -3,9 +3,9 @@
 # Artifactory from the ansible-collection-windchill repository.
 #
 # Installed into the control-node image only in "release mode" (an
-# Artifactory URL and token given at build time, see docs/09). In "dev mode"
+# Artifactory URL and token given at build time, see tutorial/09). In "dev mode"
 # (plain `docker compose build`) docker-compose.yml mounts your local checkout
 # of the collection instead, so this file is not used.
 collections:
   - name: acme.windchill
-    version: "1.0.0"      # pin exactly; raise it deliberately, environment by environment
+    version: "1.1.0"      # pin exactly; raise it deliberately, environment by environment

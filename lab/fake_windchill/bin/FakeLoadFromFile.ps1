@@ -4,11 +4,13 @@
   bin\windchill.cmd calls it with the same arguments the real launcher gets:
       windchill wt.load.LoadFromFile -d <file> -u <user> -p <password> [-CONT_PATH <path>] [-UNATTENDED] [-NOSERVERSTOP]
 
-  It imitates the real utility's habits so the Ansible role can be exercised honestly:
+  It imitates the real utility's habits so the Ansible roles can be exercised honestly:
     * chatty stdout, and exit code 0 EVEN WHEN THE LOAD FAILS (the real one is
       unreliable about exit codes too) - callers must scan the output
     * validates that the DOCTYPE's DTD exists under <WT_HOME>\loadXMLFiles
-    * "loaded" rules are written to <WT_HOME>\fakedb\oir\<container>\<rule>.xml
+    * every csv* element with a handler attribute is "loaded":
+        csvTypeBasedRule (OIRs)  -> checked and written to <WT_HOME>\fakedb\oir\<container>\<rule>.xml
+        anything else            -> written to <WT_HOME>\fakedb\<LoaderClass>\<name>.xml
     * password "wrong"  -> authentication failure
     * no -u / -p        -> pretends to open a login dialog and hangs for 90 s
 
@@ -90,47 +92,70 @@ catch {
     exit 0
 }
 
-$rules = $xml.SelectNodes('//csvTypeBasedRule')
-if ($rules.Count -eq 0) {
+# Every loadable element is a csv* element carrying a handler attribute
+# (its children, csvname and friends, have none).
+$elements = $xml.SelectNodes('//*[starts-with(local-name(), "csv") and @handler]')
+if ($elements.Count -eq 0) {
     Write-Output "No csv* load elements found in $d - nothing loaded"
     exit 0
 }
 
+function Get-ChildText($node, $childName, $default) {
+    $c = $node.SelectSingleNode($childName)
+    if ($c) { $c.InnerText } else { $default }
+}
+
 $n = 0
-foreach ($rule in $rules) {
-    $handler = $rule.GetAttribute('handler')
-    if ($handler -ne 'wt.rule.LoadRule.createTypeBasedRule') {
-        Write-Output "wt.load.LoadFromFile: no such handler '$handler' for element <csvTypeBasedRule>"
-        exit 0
-    }
-    $name = $rule.SelectSingleNode('csvname').InnerText
-    $type = $rule.SelectSingleNode('csvtype').InnerText
-    $ruleType = if ($rule.SelectSingleNode('csvruleType')) { $rule.SelectSingleNode('csvruleType').InnerText } else { 'INIT' }
-    $enabled = if ($rule.SelectSingleNode('csvenabled')) { $rule.SelectSingleNode('csvenabled').InnerText } else { 'true' }
-    $target = if ($rule.SelectSingleNode('csvcontainerPath')) { $rule.SelectSingleNode('csvcontainerPath').InnerText } else { $container }
-    $body = $rule.SelectSingleNode('csvcontent').InnerText
+foreach ($el in $elements) {
+    $handler = $el.GetAttribute('handler')
 
-    try { [xml]$bodyXml = $body }
-    catch {
-        Write-Output "wt.rule.RuleException: content of rule '$name' is not well-formed XML: $($_.Exception.Message)"
-        exit 0
-    }
-    $objType = $bodyXml.DocumentElement.GetAttribute('objType')
-    $typeClass = ($type -split '\|')[1]
-    if ($objType -and $typeClass -and $objType -ne $typeClass) {
-        Write-Output "Warning: rule '$name' is for $type but its content says objType=$objType"
-    }
+    if ($el.LocalName -eq 'csvTypeBasedRule') {
+        # ---- object initialization rule: validate like the real loader would ----
+        if ($handler -ne 'wt.rule.LoadRule.createTypeBasedRule') {
+            Write-Output "wt.load.LoadFromFile: no such handler '$handler' for element <csvTypeBasedRule>"
+            exit 0
+        }
+        $name = Get-ChildText $el 'csvname' ''
+        $type = Get-ChildText $el 'csvtype' ''
+        $ruleType = Get-ChildText $el 'csvruleType' 'INIT'
+        $enabled = Get-ChildText $el 'csvenabled' 'true'
+        $target = Get-ChildText $el 'csvcontainerPath' $container
+        $body = Get-ChildText $el 'csvcontent' ''
 
-    $safeTarget = $target -replace '[^A-Za-z0-9_.=-]', '_'
-    $safeName = $name -replace '[^A-Za-z0-9_.-]', '_'
-    $dir = Join-Path $wtHome "fakedb\oir\$safeTarget"
-    New-Item -ItemType Directory -Force -Path $dir | Out-Null
-    $dest = Join-Path $dir "$safeName.xml"
-    $verb = if (Test-Path -LiteralPath $dest) { 'Updated' } else { 'Created' }
-    Set-Content -LiteralPath $dest -Value $body -Encoding UTF8
-    Write-Output "$verb TypeBasedRule '$name' (type=$type, ruleType=$ruleType, enabled=$enabled) in $target"
+        try { [xml]$bodyXml = $body }
+        catch {
+            Write-Output "wt.rule.RuleException: content of rule '$name' is not well-formed XML: $($_.Exception.Message)"
+            exit 0
+        }
+        $objType = $bodyXml.DocumentElement.GetAttribute('objType')
+        $typeClass = ($type -split '\|')[1]
+        if ($objType -and $typeClass -and $objType -ne $typeClass) {
+            Write-Output "Warning: rule '$name' is for $type but its content says objType=$objType"
+        }
+
+        $safeTarget = $target -replace '[^A-Za-z0-9_.=-]', '_'
+        $safeName = $name -replace '[^A-Za-z0-9_.-]', '_'
+        $dir = Join-Path $wtHome "fakedb\oir\$safeTarget"
+        New-Item -ItemType Directory -Force -Path $dir | Out-Null
+        $dest = Join-Path $dir "$safeName.xml"
+        $verb = if (Test-Path -LiteralPath $dest) { 'Updated' } else { 'Created' }
+        Set-Content -LiteralPath $dest -Value $body -Encoding UTF8
+        Write-Output "$verb TypeBasedRule '$name' (type=$type, ruleType=$ruleType, enabled=$enabled) in $target"
+    }
+    else {
+        # ---- any other loader (type definitions, attributes, life cycles, ...) ----
+        $name = Get-ChildText $el 'csvname' "$($el.LocalName)_$n"
+        $loader = ($handler -split '\.')[-2]           # e.g. TypeDefinitionLoader
+        $safeName = $name -replace '[^A-Za-z0-9_.-]', '_'
+        $dir = Join-Path $wtHome "fakedb\$loader"
+        New-Item -ItemType Directory -Force -Path $dir | Out-Null
+        $dest = Join-Path $dir "$safeName.xml"
+        $verb = if (Test-Path -LiteralPath $dest) { 'Updated' } else { 'Created' }
+        Set-Content -LiteralPath $dest -Value $el.OuterXml -Encoding UTF8
+        Write-Output "$verb <$($el.LocalName)> '$name' via $handler"
+    }
     $n++
 }
 
-Write-Output "Load completed: $n rule(s) processed."
+Write-Output "Load completed: $n element(s) processed."
 exit 0

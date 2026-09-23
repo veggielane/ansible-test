@@ -1,6 +1,6 @@
 ---
-# The whole Windchill configuration: one role per configuration area.
-# Roles come from the acme.windchill collection (docs/09).
+# The whole Windchill configuration: one role per configuration area, in the
+# order Windchill needs. Roles come from the acme.windchill collection.
 #   ansible-playbook playbooks/site.yml               # lab (default)
 #   ansible-playbook playbooks/site.yml -e target=dev
 #   ansible-playbook playbooks/site.yml --tags oir    # one area only
@@ -10,11 +10,16 @@
   gather_facts: false
 
   roles:
+    # 1. Soft types first: nothing that refers to a type can load before it exists.
+    #    The oir role also declares this as a dependency, so even --tags oir
+    #    imports the types first.
+    - role: acme.windchill.types
+      tags: [types]
+
+    # 2. Object initialization rules
     - role: acme.windchill.oir
       tags: [oir]
 
-    # Add future roles here, one per configuration area (docs/08-next-roles.md):
+    # Add future roles here in dependency order (tutorial/08-next-roles.md):
     # - role: acme.windchill.lifecycles
     #   tags: [lifecycles]
-    # - role: acme.windchill.properties
-    #   tags: [properties]

@@ -1,0 +1,11 @@
+---
+# Import Windchill soft types (attributes, layouts, enumerations) only.
+#   ansible-playbook playbooks/windchill_types.yml
+#   ansible-playbook playbooks/windchill_types.yml --check          # dry run
+#   ansible-playbook playbooks/windchill_types.yml -e windchill_types_force=true
+- name: Windchill - soft types
+  hosts: "{{ target | default('lab') }}"   # environment to touch: -e target=dev|ppe|live (default: lab)
+  gather_facts: false
+
+  roles:
+    - acme.windchill.types

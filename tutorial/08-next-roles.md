@@ -31,7 +31,7 @@ Steps 5 and 6 are copy-and-rename from `acme.windchill.oir`; that is deliberate.
 | Folders, cabinets | LoadFromFile (`wt.folder.LoadFolder.*`) | same recipe | same |
 | Life cycle templates | LoadFromFile (`wt.lifecycle.LoadLifeCycle.*`) or Import/Export | same recipe with exported XML as `load_file` | same |
 | Workflow templates | Import/Export (jar) via the UI or `wt.ixb` command line | `win_copy` the jar + `win_shell` the import; track by checksum like the loader | applied copy |
-| Types and attributes | Type and Attribute Management export/import | export from dev, `win_copy` + import command | applied copy |
+| Soft types, attributes, layouts, enumerations | Type and Attribute Management export -> load file, LoadFromFile | **done**: `acme.windchill.types`; `oir` depends on it so types always load first | applied-copy checksum |
 | Preferences | Preference Management export/import | same | applied copy |
 | `wt.properties`, `site.xconf` | `xconfmanager -s key=value -t codebase/wt.properties -p` | `win_shell xconfmanager` for each key with `changed_when` based on reading the current value first; **handler** restarts Windchill | read-then-set |
 | Business Administrative Change (BAC) | PTC's tool for promoting config between environments (11.1+) | `win_shell` the BAC import of a package exported from dev | applied copy |

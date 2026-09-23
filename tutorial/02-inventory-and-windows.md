@@ -58,10 +58,10 @@ hosts: "{{ target | default('lab') }}"
 so it runs against the lab unless you say otherwise:
 
 ```powershell
-.\bin\ansible.ps1 ansible-playbook playbooks/01_ping.yml                  # lab
-.\bin\ansible.ps1 ansible-playbook playbooks/01_ping.yml -e target=dev
-.\bin\ansible.ps1 ansible-playbook playbooks/01_ping.yml -e target=live
-.\bin\ansible.ps1 ansible-playbook playbooks/01_ping.yml -e target=windchill   # all four, deliberately
+.\bin\ansible.ps1 ansible-playbook tutorial/playbooks/01_ping.yml                  # lab
+.\bin\ansible.ps1 ansible-playbook tutorial/playbooks/01_ping.yml -e target=dev
+.\bin\ansible.ps1 ansible-playbook tutorial/playbooks/01_ping.yml -e target=live
+.\bin\ansible.ps1 ansible-playbook tutorial/playbooks/01_ping.yml -e target=windchill   # all four, deliberately
 ```
 
 `target` can be a group or a host name. A forgotten option lands on the lab,
@@ -129,7 +129,7 @@ ansible-documentation repository on GitHub).
 ## Test it
 
 ```powershell
-.\bin\ansible.ps1 ansible-playbook playbooks/01_ping.yml
+.\bin\ansible.ps1 ansible-playbook tutorial/playbooks/01_ping.yml
 # or, without a playbook ("ad-hoc"):
 .\bin\ansible.ps1 ansible lab -m ansible.windows.win_ping
 ```
@@ -171,6 +171,6 @@ and in `group_vars/windchill/vars.yml` swap block A for block B
 3. If WT_HOME or the organisation name differ per environment, set them in
    `group_vars/<env>/vars.yml`; otherwise leave the shared values in
    `group_vars/windchill/vars.yml`.
-4. `.\bin\ansible.ps1 ansible-playbook playbooks/01_ping.yml -e target=dev`
+4. `.\bin\ansible.ps1 ansible-playbook tutorial/playbooks/01_ping.yml -e target=dev`
 
 Next: [03 - Your first playbook](03-first-playbook.md)
