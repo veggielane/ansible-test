@@ -18,7 +18,7 @@ inventory/                  WHO and WHAT
   group_vars/windchill/       shared settings + the lists of what to load (types.yml, oir.yml)
   group_vars/<env>/           what differs per environment + that environment's vault
 config/                     the configuration CONTENT, shared by all environments
-  types/                      soft-type load files exported from Type and Attribute Management
+  types/<type>/               one folder per soft type: the up-to-four load files of its export
   oir/                        object initialization rule bodies
 playbooks/
   site.yml                    everything, in dependency order (types, then oir, ...)
@@ -36,7 +36,7 @@ tutorial/                   the lessons and their practice playbooks
 
 | Step | Role | Data here | How Windchill takes it |
 |---|---|---|---|
-| 1 | `acme.windchill.types` | `group_vars/windchill/types.yml`, `config/types/*.xml` | `LoadFromFile` of the export from Type and Attribute Management, site level |
+| 1 | `acme.windchill.types` | `group_vars/windchill/types.yml`, `config/types/<type>/*.xml` | `LoadFromFile` of the export from Type and Attribute Management, site level |
 | 2 | `acme.windchill.oir` | `group_vars/windchill/oir.yml`, `config/oir/*.xml` | `LoadFromFile` of a rendered `csvTypeBasedRule` document |
 
 The order is enforced by the collection (`oir` depends on `types`), not only

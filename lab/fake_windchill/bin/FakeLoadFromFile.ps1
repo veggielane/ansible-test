@@ -10,7 +10,7 @@
     * validates that the DOCTYPE's DTD exists under <WT_HOME>\loadXMLFiles
     * every csv* element with a handler attribute is "loaded":
         csvTypeBasedRule (OIRs)  -> checked and written to <WT_HOME>\fakedb\oir\<container>\<rule>.xml
-        anything else            -> written to <WT_HOME>\fakedb\<LoaderClass>\<name>.xml
+        anything else            -> written to <WT_HOME>\fakedb\<LoaderClass>\<name>.<element>.xml
     * password "wrong"  -> authentication failure
     * no -u / -p        -> pretends to open a login dialog and hangs for 90 s
 
@@ -149,7 +149,7 @@ foreach ($el in $elements) {
         $safeName = $name -replace '[^A-Za-z0-9_.-]', '_'
         $dir = Join-Path $wtHome "fakedb\$loader"
         New-Item -ItemType Directory -Force -Path $dir | Out-Null
-        $dest = Join-Path $dir "$safeName.xml"
+        $dest = Join-Path $dir "$safeName.$($el.LocalName).xml"   # one file per element kind
         $verb = if (Test-Path -LiteralPath $dest) { 'Updated' } else { 'Created' }
         Set-Content -LiteralPath $dest -Value $el.OuterXml -Encoding UTF8
         Write-Output "$verb <$($el.LocalName)> '$name' via $handler"

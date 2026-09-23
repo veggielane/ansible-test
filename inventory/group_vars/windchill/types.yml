@@ -4,19 +4,26 @@
 # on the types role, so a rule for com.acme.Widget never runs before the type
 # exists.
 #
-# Each entry is a load file exported from Windchill's Type and Attribute
-# Management (or produced with an export definition file, see the role's
-# README), saved under config/types/ and copied to the server as-is.
-# Import is "replace" for each type in the file; global enumerations are
-# never deleted. Order matters when a file's types extend another file's.
+# A type export from Windchill (Type and Attribute Management, or the
+# export-definition procedure in the role's README) is up to FOUR load
+# files per type: type definition, attributes, layouts, enumerations. Keep
+# one folder per type under config/types/ and point an entry at it; the
+# files are loaded in the order of windchill_types_file_order (enumerations,
+# type, attributes, layouts by default; adjust the patterns to your export's
+# file names in group_vars/windchill/vars.yml if needed).
 #
+# Entries load in list order: a parent type before its subtypes.
 # The lab has its own list in group_vars/lab/types.yml (a child group wins).
 windchill_types_files: []
 
 # Example:
 #
 # windchill_types_files:
-#   - name: acme_part_types                   # names the applied copy and the log
-#     load_file: types/acme_part_types.xml    # relative to config/
-#   - name: acme_document_types
-#     load_file: types/acme_document_types.xml
+#   - name: acme_part                       # names the applied copies and logs
+#     load_dir: types/acme_part             # config/types/acme_part/*.xml, ordered
+#   - name: acme_document
+#     files:                                # or spell the order out
+#       - types/acme_document/AcmeDocument_Enumerations.xml
+#       - types/acme_document/AcmeDocument_TypeDefinition.xml
+#       - types/acme_document/AcmeDocument_Attributes.xml
+#       - types/acme_document/AcmeDocument_Layouts.xml

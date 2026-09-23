@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE NmLoader SYSTEM "standardX26.dtd">
+<!--
+  LAB PLACEHOLDER: the "Attributes" load file of the soft type com.acme.LabPart.
+  A real type export from Type and Attribute Management produces up to four
+  such files per type; this folder imitates one so the ordering
+  (enumerations, type, attributes, layouts) can be seen in the lab.
+  Only the fake Windchill loads it. Do NOT hand-write real type files:
+  export them from your source system and put the files in a folder like this.
+-->
+<NmLoader>
+  <csvAttributes handler="com.ptc.core.lwc.server.TypeDefinitionLoader.beginProcessAttributeDefinition">
+    <csvname>com.acme.LabPart</csvname>
+    <csvkind>Attributes</csvkind>
+  </csvAttributes>
+</NmLoader>

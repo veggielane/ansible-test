@@ -11,7 +11,7 @@ C:\FakeWindchill\Windchill\                <- windchill_home in inventory/group_
 ├── loadXMLFiles\standardX26.dtd           <- DTD lookup, like the real loader
 └── fakedb\
     ├── oir\<container>\<rule>.xml         <- "loaded" object initialization rules
-    └── TypeDefinitionLoader\<type>.xml    <- "loaded" soft types (any other loader: fakedb\<LoaderClass>\)
+    └── TypeDefinitionLoader\<type>.<element>.xml   <- "loaded" soft types (any other loader: fakedb\<LoaderClass>\)
 C:\FakeWindchill\ansible\                  <- windchill_staging_dir (staging\, applied\, logs\)
 ```
 

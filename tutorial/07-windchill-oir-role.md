@@ -57,8 +57,8 @@ not: run the playbook ten times and Windchill is touched once.
 One more thing happens before any of this: `acme.windchill.types` runs. A
 rule for a soft type cannot be loaded until the type exists, so the `oir`
 role lists `types` as a dependency in its `meta/main.yml`, and the lab
-inventory carries an example type file (`config/types/example_types.xml`,
-`group_vars/lab/types.yml`). Whichever way you start the play, `--tags oir`
+inventory carries an example type folder (`config/types/lab_part/`, four
+placeholder files, listed in `group_vars/lab/types.yml`). Whichever way you start the play, `--tags oir`
 included, the types go in first.
 
 ## Part A - render without any host
