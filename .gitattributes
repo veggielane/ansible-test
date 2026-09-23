@@ -1,0 +1,6 @@
+# Line endings: LF in the repository and on checkout (the files are read
+# inside a Linux container), except Windows scripts, which want CRLF.
+* text=auto eol=lf
+*.cmd text eol=crlf
+*.bat text eol=crlf
+*.ps1 text eol=crlf

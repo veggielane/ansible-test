@@ -1,0 +1,31 @@
+---
+# Lesson 04c: templates and handlers.
+#
+# Run it twice. The first run reports "changed" and fires the handler; the
+# second reports "ok" and the handler stays quiet. That is IDEMPOTENCY, the
+# core idea of Ansible: you describe the desired end state, not the steps.
+- name: Lesson 04c - templates and handlers
+  hosts: "{{ target | default('lab') }}"   # environment to touch: -e target=dev|ppe|live (default: lab)
+  gather_facts: true
+
+  tasks:
+    - name: Ensure the lessons folder exists on the server
+      ansible.windows.win_file:
+        path: "{{ windchill_staging_dir }}\\lessons"
+        state: directory
+
+    # A template is a text file with {{ placeholders }} (Jinja2 syntax).
+    # Ansible renders it on the control node and copies the result over.
+    # `src` is relative to playbooks/templates/ (Ansible looks there automatically).
+    - name: Render hello.txt from a template
+      ansible.windows.win_template:
+        src: hello.txt.j2
+        dest: "{{ windchill_staging_dir }}\\lessons\\hello.txt"
+      notify: Report that hello.txt changed     # only fires if this task CHANGED something
+
+  # Handlers run at the END of the play, once, and only if notified.
+  # Classic use: restart a service after its config file changed.
+  handlers:
+    - name: Report that hello.txt changed
+      ansible.builtin.debug:
+        msg: "hello.txt was (re)written - this is where you would restart a service"

@@ -1,0 +1,39 @@
+---
+# LAB ONLY: install the fake Windchill on the target so every other playbook
+# can be run without a real Windchill.
+#   ansible-playbook playbooks/lab_setup.yml
+- name: Lab - install the fake Windchill
+  hosts: lab                # hard-wired: this must never run against dev/ppe/live
+  gather_facts: false
+
+  tasks:
+    - name: Refuse to run against anything that is not the lab
+      ansible.builtin.assert:
+        that: lab_fake_windchill | default(false) | bool
+        fail_msg: "Only for the lab inventory (it sets lab_fake_windchill: true). You are pointing at {{ inventory_hostname }}."
+        quiet: true
+
+    - name: Create the fake WT_HOME
+      ansible.windows.win_file:
+        path: "{{ windchill_home }}"
+        state: directory
+
+    # A src ending in "/" means "the contents of this folder", copied recursively.
+    # playbook_dir is a magic variable: the folder this playbook lives in.
+    - name: Copy the fake launcher, loader and DTD
+      ansible.windows.win_copy:
+        src: "{{ playbook_dir }}/../lab/fake_windchill/"
+        dest: "{{ windchill_home }}"
+
+    - name: Try the launcher once
+      ansible.windows.win_shell: |
+        & "{{ windchill_bin }}" wt.load.LoadFromFile
+        exit $LASTEXITCODE
+      args:
+        chdir: "{{ windchill_home }}"
+      register: lab_probe
+      changed_when: false
+
+    - name: Show what it said
+      ansible.builtin.debug:
+        msg: "{{ lab_probe.stdout_lines }}"

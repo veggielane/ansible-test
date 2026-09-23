@@ -1,0 +1,15 @@
+{# This is a Jinja2 comment: it does not appear in the output. #}
+Hello from Ansible!
+
+This file was rendered for {{ inventory_hostname }} ({{ ansible_host }})
+running {{ ansible_os_name }}.
+
+Windchill home ......: {{ windchill_home }}
+Windchill admin user : {{ windchill_admin_user }}
+Rendered at .........: {{ '%Y-%m-%d %H:%M:%S' | strftime }}
+
+{% if windchill_service_name | length > 0 %}
+Service to watch ....: {{ windchill_service_name }}
+{% else %}
+Service to watch ....: (none configured)
+{% endif %}

@@ -1,0 +1,18 @@
+---
+# Collections are add-on packages of modules (think: plugins for Ansible).
+# The Docker image installs these at build time. Outside Docker run:
+#   ansible-galaxy collection install -r requirements.yml
+collections:
+  # Core Windows modules: win_ping, win_copy, win_template, win_command,
+  # win_shell, win_stat, win_file, win_service_info, ...
+  - name: ansible.windows
+    version: ">=2.0.0"
+
+  # Extra Windows modules you will want later (win_scheduled_task,
+  # win_firewall_rule, win_psmodule, win_lineinfile, ...).
+  - name: community.windows
+    version: ">=2.0.0"
+
+  # Only used for the profile_tasks timing callback enabled in ansible.cfg.
+  - name: ansible.posix
+    version: ">=1.5.0"

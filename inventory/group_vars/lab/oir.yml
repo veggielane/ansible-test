@@ -1,0 +1,24 @@
+---
+# LAB object initialization rules. Overrides the (empty) shared list in
+# group_vars/windchill/oir.yml because lab is a child group of windchill.
+# Safe to play with: the fake Windchill only writes files under
+# C:\FakeWindchill\Windchill\fakedb\oir\.
+windchill_oir_rules:
+
+  # Wrapper rendered from the role's template, body from config/oir/.
+  - name: LAB_WTPart
+    type: WCTYPE|wt.part.WTPart
+    container_path: "{{ windchill_default_container_path }}"
+    content_file: oir/example_wtpart.xml
+    enabled: true
+
+  # Body written inline. Change the folder and re-run the playbook:
+  # only this rule gets reloaded.
+  - name: LAB_WTDocument
+    type: WCTYPE|wt.doc.WTDocument
+    content: |
+      <AttributeValues objType="wt.doc.WTDocument">
+        <AttrValue id="folder.id" algorithm="com.ptc.core.foundation.folder.server.impl.FolderPathAttributeAlgorithm">
+          <Arg>/Default/Documents</Arg>
+        </AttrValue>
+      </AttributeValues>

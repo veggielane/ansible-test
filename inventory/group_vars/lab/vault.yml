@@ -1,0 +1,9 @@
+---
+# LAB secrets. Lesson 06 encrypts this file with ansible-vault.
+
+# Your Windows login on this PC (must be an administrator for WinRM).
+vault_windows_user: chris
+vault_windows_password: 'ChangeMe!'
+
+# Anything except the word "wrong" satisfies the fake Windchill.
+vault_windchill_admin_password: 'wcadmin'

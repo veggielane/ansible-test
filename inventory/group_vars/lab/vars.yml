@@ -1,0 +1,13 @@
+---
+# LAB: your own PC running the fake Windchill (lab/fake_windchill).
+# Everything not listed here comes from group_vars/windchill/vars.yml.
+
+lab_fake_windchill: true                           # guards playbooks/lab_setup.yml
+
+windchill_home: 'C:\FakeWindchill\Windchill'
+windchill_bin: "{{ windchill_home }}\\bin\\windchill.cmd"   # real Windchill: bin\windchill.exe
+windchill_staging_dir: 'C:\FakeWindchill\ansible'
+
+# The fake LoadFromFile "hangs" when no credentials are given; a short timeout
+# lets you see what Ansible does about that (lesson 07).
+windchill_load_timeout: 60

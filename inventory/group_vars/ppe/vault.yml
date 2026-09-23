@@ -1,0 +1,5 @@
+---
+# PPE secrets. Encrypt with:  ansible-vault encrypt inventory/group_vars/ppe/vault.yml
+vault_windows_user: Administrator
+vault_windows_password: 'ChangeMe!'
+vault_windchill_admin_password: 'ChangeMe!'

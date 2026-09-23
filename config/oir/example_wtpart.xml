@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  EXAMPLE rule body for wt.part.WTPart. Not loaded unless you reference it
+  from inventory/group_vars/windchill/oir.yml.
+
+  Best practice: export a real rule from your own Windchill
+    Site > Utilities > Object Initialization Rules Administrator > select > Export
+  save it here, and start from that instead of this file. The algorithm class
+  names below are the common out-of-the-box ones, but check them against your
+  version's export.
+-->
+<AttributeValues objType="wt.part.WTPart">
+
+  <!-- Auto-number: PRT- followed by a 10-digit sequence number -->
+  <AttrValue id="number" algorithm="com.ptc.windchill.enterprise.revisionControlled.server.impl.NumberGenerator">
+    <Arg>PRT-{GEN:wt.enterprise.SequenceGenerator:WTPARTID_seq:10:0}</Arg>
+  </AttrValue>
+
+  <!-- Default folder inside the context -->
+  <AttrValue id="folder.id" algorithm="com.ptc.core.foundation.folder.server.impl.FolderPathAttributeAlgorithm">
+    <Arg>/Default</Arg>
+  </AttrValue>
+
+  <!-- Life cycle template by name -->
+  <AttrValue id="lifeCycle.id" algorithm="com.ptc.core.foundation.lifecycle.server.impl.LifeCycleTemplateAttributeAlgorithm">
+    <Arg>Basic</Arg>
+  </AttrValue>
+
+</AttributeValues>

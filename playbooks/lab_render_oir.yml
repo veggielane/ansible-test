@@ -1,0 +1,46 @@
+---
+# Render the OIR load files on the control node, into build/oir/, without
+# touching any Windows host. Use it to see exactly what the role would send
+# to LoadFromFile, or to develop rules before you have any Windchill at all.
+#   ansible-playbook playbooks/lab_render_oir.yml
+- name: Lab - render OIR load files locally
+  hosts: "{{ target | default('lab') }}"   # so the group's variables (rules, container path) are in scope
+  gather_facts: false
+
+  vars:
+    # Mirrors the oir role's defaults; the role itself is not run here.
+    windchill_oir_load_dtd: standardX26.dtd
+    # The template lives in the collection: mounted under /dev-collections in
+    # dev mode, installed under /root/.ansible/collections in release mode.
+    lab_oir_template: >-
+      {{ lookup('ansible.builtin.first_found',
+                ['/dev-collections/ansible_collections/acme/windchill/roles/oir/templates/oir_load.xml.j2',
+                 '/root/.ansible/collections/ansible_collections/acme/windchill/roles/oir/templates/oir_load.xml.j2']) }}
+
+  tasks:
+    # delegate_to: localhost = run this task on the control node instead of the host.
+    - name: Ensure build/oir exists on the control node
+      ansible.builtin.file:
+        path: "{{ playbook_dir }}/../build/oir"
+        state: directory
+        mode: "0755"
+      delegate_to: localhost
+
+    - name: Render each rule with the role's template
+      ansible.builtin.template:
+        src: "{{ lab_oir_template }}"
+        dest: "{{ playbook_dir }}/../build/oir/{{ inventory_hostname }}_{{ windchill_oir_rule.name | regex_replace('[^A-Za-z0-9_.-]', '_') }}.xml"
+        mode: "0644"
+      vars:
+        windchill_oir_container_path: "{{ windchill_oir_rule.container_path | default(windchill_default_container_path) }}"
+      loop: "{{ windchill_oir_rules }}"
+      loop_control:
+        loop_var: windchill_oir_rule
+        label: "{{ windchill_oir_rule.name }}"
+      when: windchill_oir_rule.load_file is not defined
+      delegate_to: localhost
+
+    - name: Where to look
+      ansible.builtin.debug:
+        msg: "Rendered load files are in build/oir/ - open them in your editor."
+      delegate_to: localhost

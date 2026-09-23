@@ -1,0 +1,47 @@
+---
+# Shared by EVERY Windchill server in every environment (lab, dev, ppe, live).
+# Environment-specific values live in group_vars/<env>/ and win over these
+# (a child group beats its parent). Ansible loads every *.yml in this folder:
+#   vars.yml  - plain settings (this file)
+#   oir.yml   - the object initialization rules (one file per configuration area)
+
+# ---------------------------------------------------------------------------
+# A) HOW to connect: WinRM over HTTPS (Windows-side setup: docs/02)
+# ---------------------------------------------------------------------------
+ansible_connection: winrm
+ansible_port: 5986
+ansible_winrm_transport: ntlm                  # local or domain account, no Kerberos setup needed
+ansible_winrm_server_cert_validation: ignore   # lab/dev: self-signed cert. live: validate + real cert
+ansible_user: "{{ vault_windows_user }}"        # vault_* are defined per environment
+ansible_password: "{{ vault_windows_password }}"   # in group_vars/<env>/vault.yml
+
+# ---------------------------------------------------------------------------
+# B) Alternative: OpenSSH Server on Windows (comment out block A, uncomment this)
+# ---------------------------------------------------------------------------
+# ansible_connection: ssh
+# ansible_port: 22
+# ansible_shell_type: powershell               # must match the sshd DefaultShell registry value
+# ansible_user: "{{ vault_windows_user }}"
+# ansible_password: "{{ vault_windows_password }}"
+
+# ---------------------------------------------------------------------------
+# Windchill installation (used by every windchill_* role)
+# Identical on dev/ppe/live? keep it here. Differs? override in group_vars/<env>/vars.yml
+# ---------------------------------------------------------------------------
+# WT_HOME: the folder containing bin\windchill.exe.
+# Windows paths: use SINGLE quotes so the backslashes are taken literally.
+windchill_home: 'D:\ptc\Windchill_13.0\Windchill'
+windchill_admin_user: wcadmin
+windchill_admin_password: "{{ vault_windchill_admin_password }}"
+
+# Working folder Ansible creates on the server: rendered load files
+# (staging\), a copy of what was last loaded (applied\), LoadFromFile output (logs\).
+windchill_staging_dir: 'C:\ansible\windchill'
+
+# Container used when a rule does not name its own. LoadFromFile's own
+# default (no -CONT_PATH) is the site "Exchange" container; org level:
+windchill_default_container_path: '/wt.inf.container.OrgContainer=Demo Organization'
+
+# Optional: Windows service that must be running before we load anything.
+# Empty = skip the check.
+windchill_service_name: ''

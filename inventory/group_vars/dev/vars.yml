@@ -1,0 +1,6 @@
+---
+# DEV-only settings. Everything not listed here comes from group_vars/windchill/vars.yml.
+# Typical things that differ per environment:
+# windchill_home: 'D:\ptc\Windchill\Windchill'
+# windchill_default_container_path: '/wt.inf.container.OrgContainer=ACME'
+# windchill_service_name: 'Windchill'

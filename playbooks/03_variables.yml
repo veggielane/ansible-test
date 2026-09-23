@@ -1,0 +1,58 @@
+---
+# Lesson 04b: variables, register, when, loop, set_fact.
+# Run:  ansible-playbook playbooks/03_variables.yml
+#       ansible-playbook playbooks/03_variables.yml -e greeting="hello from the command line"
+- name: Lesson 04b - variables, register, when, loop
+  hosts: "{{ target | default('lab') }}"   # environment to touch: -e target=dev|ppe|live (default: lab)
+  gather_facts: false
+
+  vars:                          # play-level variables
+    greeting: "hello from the play"
+    paths_to_check:
+      - "{{ windchill_home }}"
+      - "{{ windchill_home }}\\bin\\windchill.exe"   # double quotes: backslashes must be doubled
+      - 'C:\definitely\not\here'                      # single quotes: taken literally
+
+  tasks:
+    - name: Variables come from many places (and -e wins over all of them)
+      ansible.builtin.debug:
+        msg:
+          - "play var ......... greeting = {{ greeting }}"
+          - "group_vars ....... windchill_home = {{ windchill_home }}"
+          - "inventory ........ ansible_host = {{ ansible_host }}"
+          - "magic variable ... inventory_hostname = {{ inventory_hostname }}"
+
+    # `register` stores a task's result in a variable so later tasks can use it.
+    - name: Run PowerShell and capture the output
+      ansible.windows.win_shell: Get-Date -Format o
+      register: server_time      # "now" is reserved by Ansible, so pick another name
+      changed_when: false        # a read-only command must not report "changed"
+
+    - name: Use the captured result
+      ansible.builtin.debug:
+        msg: "The server thinks it is {{ server_time.stdout | trim }}"
+
+    # `loop` runs the task once per item; `item` is the current element.
+    - name: Check several paths in one task
+      ansible.windows.win_stat:
+        path: "{{ item }}"
+      loop: "{{ paths_to_check }}"
+      register: path_checks      # with a loop, the result has a .results list
+
+    - name: Report the ones that exist
+      ansible.builtin.debug:
+        msg: "{{ item.item }} exists"
+      loop: "{{ path_checks.results }}"
+      loop_control:
+        label: "{{ item.item }}"   # keeps the output short
+      when: item.stat.exists       # `when` is evaluated per item
+
+    # `set_fact` creates a variable at runtime.
+    - name: Remember whether Windchill is installed
+      ansible.builtin.set_fact:
+        windchill_installed: "{{ path_checks.results[1].stat.exists }}"
+
+    - name: Complain if it is not
+      ansible.builtin.debug:
+        msg: "No windchill.exe under {{ windchill_home }} - fix windchill_home in group_vars"
+      when: not (windchill_installed | bool)

@@ -1,0 +1,6 @@
+<!--
+  Placeholder for Windchill's load-file DTD. The fake LoadFromFile only checks
+  that the DTD named in a load file's DOCTYPE exists in this folder, which is
+  the error you would get from a real Windchill when the name is wrong.
+-->
+<!ELEMENT NmLoader ANY>

@@ -1,0 +1,24 @@
+---
+# Object initialization rules for ALL environments (consumed by roles/oir).
+# The same list is applied to dev, then ppe, then live: that is how a change
+# is promoted. Rule bodies live in config/oir/ and are shared the same way.
+#
+# Deliberately empty to start with: an OIR changes how every new object of a
+# type is numbered / filed / life-cycled, so nothing is loaded until you say
+# so. docs/07 walks through the safe first exercise on a real server: export
+# an EXISTING rule from Windchill and load it back unchanged.
+#
+# The lab has its own list in group_vars/lab/oir.yml (a child group wins).
+windchill_oir_rules: []
+
+# Example (every key explained in roles/oir/README.md):
+#
+# windchill_oir_rules:
+#   - name: ACME_WTPart                              # rule name shown in the OIR Administrator
+#     type: WCTYPE|wt.part.WTPart                    # object type the rule applies to
+#     container_path: "{{ windchill_default_container_path }}"
+#     content_file: oir/acme_wtpart.xml              # relative to config/
+#     enabled: true
+#
+#   - name: ACME_Change_Rules
+#     load_file: oir/acme_change_rules_load.xml      # a complete LoadFromFile document, copied as-is

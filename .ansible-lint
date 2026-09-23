@@ -1,0 +1,22 @@
+---
+# Settings for ansible-lint (run: ansible-lint). "production" is the strictest
+# built-in profile; it enforces the conventions the lessons teach
+# (fully-qualified module names, named tasks, changed_when on commands, ...).
+profile: production
+
+exclude_paths:
+  - .git/
+  - docker/
+  - docs/
+  - config/
+  - lab/
+  - build/
+
+skip_list:
+  # The rule wants every variable a role defines to start with that role's
+  # full name (windchill_common_...). This project deliberately uses the
+  # shorter shared namespace "windchill_" for everything windchill_common
+  # provides (windchill_home, windchill_load_*), so all windchill_* roles can
+  # read those names naturally. Role-specific variables still carry the full
+  # role name (windchill_oir_*), which is the part of the rule that matters.
+  - var-naming[no-role-prefix]

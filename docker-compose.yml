@@ -1,0 +1,38 @@
+---
+# Builds and runs the Ansible control node container.
+#
+#   docker compose build                          # once (and after editing docker/Dockerfile)
+#   docker compose run --rm ansible ansible --version
+#   docker compose run --rm ansible ansible-playbook playbooks/01_ping.yml
+#   docker compose run --rm ansible bash          # interactive shell inside the node
+#
+# The project folder is mounted at /work, so edits on Windows are visible instantly.
+services:
+  ansible:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      args:
+        # Empty = dev mode. Release mode is built with `docker build` directly
+        # (it needs a token as a build secret): see docs/09.
+        ARTIFACTORY_GALAXY_URL: ""
+    image: windchill-ansible-control:latest
+    working_dir: /work
+    volumes:
+      - ./:/work
+      # DEV MODE: your local checkout of the collection, used live. Ansible
+      # expects collections at <path>/ansible_collections/<namespace>/<name>.
+      # Once the image installs acme.windchill from Artifactory (release
+      # mode), delete this line and the ANSIBLE_COLLECTIONS_PATH below.
+      - ../ansible-collection-windchill:/dev-collections/ansible_collections/acme/windchill:ro
+    environment:
+      # See the note at the top of ansible.cfg for why this is explicit.
+      ANSIBLE_CONFIG: /work/ansible.cfg
+      # Dev checkout first, then the collections baked into the image.
+      ANSIBLE_COLLECTIONS_PATH: /dev-collections:/root/.ansible/collections
+    # Lets the container reach a Windchill running on THIS Windows PC via the
+    # hostname host.docker.internal (Docker Desktop provides it).
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    stdin_open: true
+    tty: true

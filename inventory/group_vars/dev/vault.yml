@@ -1,0 +1,9 @@
+---
+# DEV secrets. Encrypt with:  ansible-vault encrypt inventory/group_vars/dev/vault.yml
+# Windows account Ansible logs in with: a local Administrator on the server,
+# or a domain account written as 'DOMAIN\user' or 'user@domain.local'.
+vault_windows_user: Administrator
+vault_windows_password: 'ChangeMe!'
+
+# Windchill site administrator used for LoadFromFile.
+vault_windchill_admin_password: 'ChangeMe!'

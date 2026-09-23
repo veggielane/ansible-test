@@ -1,0 +1,8 @@
+---
+# Variables that apply to EVERY host (the implicit "all" group).
+
+# Where the Windchill configuration content (OIR bodies, later lifecycle and
+# workflow templates, ...) lives. inventory_dir is a built-in ("magic")
+# variable = the folder holding hosts.yml, so this is <project>/config
+# no matter where you run ansible from.
+config_dir: "{{ inventory_dir }}/../config"

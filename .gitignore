@@ -1,0 +1,19 @@
+# Vault password: NEVER commit this (lesson 06).
+.vault_pass
+
+# Editor / OS noise
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+
+# Ansible runtime leftovers
+*.retry
+.ansible/
+__pycache__/
+
+# Load files rendered locally by playbooks/lab_render_oir.yml
+build/
+
+# Artifactory access token for release-mode image builds (docs/09)
+.artifactory_token
