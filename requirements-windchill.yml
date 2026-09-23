@@ -8,4 +8,4 @@
 # of the collection instead, so this file is not used.
 collections:
   - name: acme.windchill
-    version: "1.4.0"      # pin exactly; raise it deliberately, environment by environment
+    version: "1.5.0"      # pin exactly; raise it deliberately, environment by environment
