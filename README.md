@@ -15,15 +15,16 @@ New to Ansible? The `tutorial/` folder is a course built on this project.
 ```
 inventory/                  WHO and WHAT
   hosts.yml                   lab / dev / ppe / live groups under "windchill"
-  group_vars/windchill/       shared settings + the lists of what to load (icons.yml, types.yml, oir.yml)
+  group_vars/windchill/       shared settings + what to enforce (properties.yml, icons.yml, types.yml, oir.yml)
   group_vars/<env>/           what differs per environment + that environment's vault
 config/                     the configuration CONTENT, shared by all environments
   icons/                      type icons, mirrored into codebase\netmarkets\images
   types/<type>/               one folder per soft type: the up-to-four load files of its export
   oir/                        object initialization rule bodies
 playbooks/
-  site.yml                    everything, in dependency order (icons, types, oir, ...)
-  windchill_icons.yml         one area at a time
+  site.yml                    everything, in dependency order (properties, icons, types, oir, ...)
+  windchill_properties.yml    one area at a time
+  windchill_icons.yml
   windchill_types.yml
   windchill_oir.yml
   lab_setup.yml               installs the fake Windchill on your PC
@@ -38,9 +39,10 @@ tutorial/                   the lessons and their practice playbooks
 
 | Step | Role | Data here | How Windchill takes it |
 |---|---|---|---|
-| 1 | `acme.windchill.icons` | `group_vars/windchill/icons.yml`, `config/icons/**` | plain files copied into `codebase\netmarkets\images` |
-| 2 | `acme.windchill.types` | `group_vars/windchill/types.yml`, `config/types/<type>/*.xml` | `LoadFromFile` of the export from Type and Attribute Management, site level |
-| 3 | `acme.windchill.oir` | `group_vars/windchill/oir.yml`, `config/oir/*.xml` | `LoadFromFile` of a rendered `csvTypeBasedRule` document |
+| 1 | `acme.windchill.properties` | `group_vars/windchill/properties.yml` | `xconfmanager -s ... -t ... ; xconfmanager -p` for overrides that differ in `site.xconf`, then a restart |
+| 2 | `acme.windchill.icons` | `group_vars/windchill/icons.yml`, `config/icons/**` | plain files copied into `codebase\netmarkets\images` |
+| 3 | `acme.windchill.types` | `group_vars/windchill/types.yml`, `config/types/<type>/*.xml` | `LoadFromFile` of the export from Type and Attribute Management, site level |
+| 4 | `acme.windchill.oir` | `group_vars/windchill/oir.yml`, `config/oir/*.xml` | `LoadFromFile` of a rendered `csvTypeBasedRule` document |
 
 The order is enforced by the collection (`oir` depends on `types`, `types`
 on `icons`), not only by `site.yml`, so a type can never be imported before

@@ -34,7 +34,7 @@ Steps 5 and 6 are copy-and-rename from `acme.windchill.oir`; that is deliberate.
 | Type icons and other images | files under `codebase\netmarkets\images` | **done**: `acme.windchill.icons` (`win_copy`, no loader; `types` depends on it) | win_copy checksums |
 | Soft types, attributes, layouts, enumerations | Type and Attribute Management export -> load file, LoadFromFile | **done**: `acme.windchill.types`; `oir` depends on it so types always load first | applied-copy checksum |
 | Preferences | Preference Management export/import | same | applied copy |
-| `wt.properties`, `site.xconf` | `xconfmanager -s key=value -t codebase/wt.properties -p` | `win_shell xconfmanager` for each key with `changed_when` based on reading the current value first; **handler** restarts Windchill | read-then-set |
+| `wt.properties`, `site.xconf` | `xconfmanager -s key=value -t codebase/wt.properties -p` | **done**: `acme.windchill.properties` reads the current override from `site.xconf`, sets only what differs, propagates once; a **handler** restarts Windchill (`windchill_restart_command`), flushed inside the role | read-then-set |
 | Business Administrative Change (BAC) | PTC's tool for promoting config between environments (11.1+) | `win_shell` the BAC import of a package exported from dev | applied copy |
 | Windows layer: services, scheduled backups, firewall, Java, certificates | native | `win_service`, `community.windows.win_scheduled_task`, `win_firewall_rule`, `win_certificate_store`: idempotent by themselves | built in |
 

@@ -5,8 +5,13 @@
 lab_fake_windchill: true                           # guards playbooks/lab_setup.yml
 
 windchill_home: 'C:\FakeWindchill\Windchill'
-windchill_bin: "{{ windchill_home }}\\bin\\windchill.cmd"   # real Windchill: bin\windchill.exe
+windchill_bin: "{{ windchill_home }}\\bin\\windchill.cmd"              # real Windchill: bin\windchill.exe
+windchill_xconfmanager: "{{ windchill_home }}\\bin\\xconfmanager.cmd"  # real Windchill: bin\xconfmanager.exe
 windchill_staging_dir: 'C:\FakeWindchill\ansible'
+
+# What "restart Windchill" means in the lab: just say so. On a real server
+# this is the service restart or windchill stop/start (see the properties role).
+windchill_restart_command: 'Write-Output "(lab) Windchill would be restarted now"'
 
 # The fake LoadFromFile "hangs" when no credentials are given; a short timeout
 # lets you see what Ansible does about that (lesson 07).

@@ -3,7 +3,8 @@
 # Environment-specific values live in group_vars/<env>/ and win over these
 # (a child group beats its parent). Ansible loads every *.yml in this folder:
 #   vars.yml  - plain settings (this file)
-#   icons.yml - the type icon folders to copy        (one file per configuration area)
+#   properties.yml - the site.xconf overrides         (one file per configuration area)
+#   icons.yml - the type icon folders to copy
 #   types.yml - the soft type load files to import
 #   oir.yml   - the object initialization rules
 

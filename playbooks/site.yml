@@ -10,16 +10,22 @@
   gather_facts: false
 
   roles:
-    # 1. Type icons: files under codebase\netmarkets\images that type definitions refer to.
+    # 1. Properties (site.xconf overrides). Restarts Windchill itself when
+    #    something changed and a restart command is configured, so the
+    #    roles below already see the new values.
+    - role: acme.windchill.properties
+      tags: [properties]
+
+    # 2. Type icons: files under codebase\netmarkets\images that type definitions refer to.
     - role: acme.windchill.icons
       tags: [icons]
 
-    # 2. Soft types: nothing that refers to a type can load before it exists.
+    # 3. Soft types: nothing that refers to a type can load before it exists.
     #    (types depends on icons, oir on types, so even --tags oir keeps this order.)
     - role: acme.windchill.types
       tags: [types]
 
-    # 3. Object initialization rules
+    # 4. Object initialization rules
     - role: acme.windchill.oir
       tags: [oir]
 

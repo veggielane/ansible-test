@@ -1,0 +1,25 @@
+---
+# Windchill properties for ALL environments (consumed by acme.windchill.properties).
+# Each entry becomes a site override in site.xconf, set with xconfmanager
+# only when the current override differs, then propagated. A restart is
+# needed afterwards: set windchill_restart_command in vars.yml (or per
+# environment) and the role does it, otherwise it reports it.
+#
+# Values that differ per environment (mail server, URLs) belong in
+# group_vars/<env>/vars.yml as variables, referenced from here.
+#
+# The lab has its own list in group_vars/lab/properties.yml (a child group wins).
+windchill_properties: []
+
+# Example:
+#
+# windchill_properties:
+#   - name: wt.mail.from
+#     value: "{{ windchill_mail_from }}"      # a per-environment variable
+#   - name: wt.method.verboseClient
+#     value: 'false'                          # quote booleans and numbers
+#   - name: wt.pom.queryLimit
+#     value: '2000'
+#     target: codebase/db/db.properties       # not in wt.properties: say so
+#   - name: some.obsolete.property
+#     state: absent                           # drop the override (back to the declared default)

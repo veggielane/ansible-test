@@ -8,6 +8,9 @@ every playbook and role run for real, end to end.
 C:\FakeWindchill\Windchill\                <- windchill_home in inventory/group_vars/lab
 ├── bin\windchill.cmd                      <- launcher; real Windchill: windchill.exe
 ├── bin\FakeLoadFromFile.ps1               <- imitates wt.load.LoadFromFile
+├── bin\xconfmanager.cmd, FakeXconfManager.ps1   <- imitates xconfmanager (-s, -t, --reset, -d, -p)
+├── site.xconf                             <- property overrides, written by the fake xconfmanager
+├── codebase\wt.properties                 <- "propagated" properties (key=value lines)
 ├── loadXMLFiles\standardX26.dtd           <- DTD lookup, like the real loader
 └── fakedb\
     ├── oir\<container>\<rule>.xml         <- "loaded" object initialization rules
